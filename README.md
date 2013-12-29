@@ -66,7 +66,7 @@ This is an alternate method, as used by the PhoneGap Build system.
 After creating your Cordova app with `create`, run the PlugMan script as follows to install the FastCanvas plugin:
 
 ```
-	plugman --platform android --project <your project folder> --plugin https://github.com/FastCanvas/FastCanvas.git
+	plugman --platform android --project <your project folder> --plugin https://github.com/phonegap/phonegap-plugin-fast-canvas.git
 ```
 
 #### If you have scale issues with your content ####
