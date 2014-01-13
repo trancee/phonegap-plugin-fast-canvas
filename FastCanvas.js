@@ -27,7 +27,7 @@
 FastCanvasUtils._toNative = function(success, fail, service, action, args){
 	// exec may not be defined outside of the 
 	// context of a native cordova application
-	if (cordova && typeof cordova.exec === 'function'){
+	if (typeof cordova !== "undefined" && typeof cordova.exec === 'function'){
 		cordova.exec(success, fail, service, action, args || []);
 
 	}else if (typeof fail === 'function'){
@@ -147,7 +147,7 @@ FastCanvasImage.idCounter = 0;
  * }
  * myImage.src = "images/spritesheet.jpg";
  */
-FastCanvasImage.prototype.setSrc = function(){
+FastCanvasImage.prototype.setSrc = function(value){
 	this._src = value;
 
 	var fastCanvas = FastCanvas._instance;
