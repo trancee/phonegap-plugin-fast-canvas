@@ -19,8 +19,10 @@
   
   <platform name="android">
   
-    <config-file target="res/xml/config.xml" parent="plugins">
-      <plugin name="FastCanvas" value="com.adobe.plugins.FastCanvas" />
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="FastCanvas">
+        <param name="android-package" value="com.adobe.plugins.FastCanvas"/>
+      </feature>
     </config-file>
     
     <config-file target="AndroidManifest.xml" parent="/manifest">
