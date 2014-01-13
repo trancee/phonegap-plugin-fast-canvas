@@ -1,5 +1,4 @@
-FastCanvas
-==========
+# FastCanvas
 
 FastCanvas is a Cordova/PhoneGap plugin which implements a very fast, 2D, 
 mostly-canvas-compatible rendering surface for Android. It focuses on moving 
@@ -8,7 +7,7 @@ acceleration.
 
 Unlike the HTML5 canvas, FastCanvas will encompass your entire screen and cannot be 
 integrated with other elements in the DOM.  It lives outside of the DOM in a separate 
-rendering surface that fully covers all HTML content.  More on how FastCanvas is displayed 
+rendering surface that is coverder by HTML content.  More on how FastCanvas is displayed 
 to the screen is available in the [Architecture](#architecture) section. 
 If you already have an application which uses a full screen DOM canvas, switching over 
 to FastCanvas could be an easy way to provide a boost in performance, and consistency within
@@ -20,8 +19,7 @@ hardware acceleration.  More information about API support is described in the
 [FastCanvas API](#fastCanvas-api) section.
 
 
-Getting Started
-===============
+## Getting Started
 
 FastCanvas is supported on Android devices.  Additionally, your application must 
 be designed so that:
@@ -35,94 +33,23 @@ HTML canvas.  This is handled for you seamlessly making it easy to write cross-p
 Canvas applications the use FastCanvas on Android.
 
 Prerequisites:
-* [ADT for Eclipse](http://developer.android.com/sdk/index.html)
-* [Cordova](http://cordova.apache.org/#download) or [PhoneGap](http://phonegap.com/download/) for Android (Getting started guides: [Cordova](http://cordova.apache.org/docs/en/2.7.0/guide_getting-started_android_index.md.html#Getting%20Started%20with%20Android), [PhoneGap](http://docs.phonegap.com/en/2.7.0/guide_getting-started_android_index.md.html#Getting%20Started%20with%20Android))
-* [FastCanvas](https://github.com/phonegap/phonegap-fast-canvas-plugin)
+* Cordova/PhoneGap [command-line interface](http://docs.phonegap.com/en/3.0.0/guide_cli_index.md.html)
 
 
-## Adding FastCanvas to Your Application ##
-
-1. Clone the FastCanvas tree down from github (if you haven't already).
-5. Copy `FastCanvas\FastCanvas.js` to your Java project's `assets\www` folder and include a reference to it in your `index.html`.
-3. Copy the `FastCanvas\Android\src\com` folder to your Java project's `src` folder.
-4. Copy the `FastCanvas\Android\libs\armeabi` folder to your Java project's `libs` folder.
-5. In your `res/xml/config.xml` file add the following line to the end of the <plugins> section: 
-   
-```
-<plugin name="FastCanvas" value="com.adobe.plugins.FastCanvas"/>
-```
-
-### Adding FastCanvas using the PlugMan script ###
-
-Additional prerequisites:
-* [nodejs](http://nodejs.org/)
-* [plugman](https://github.com/apache/cordova-plugman)
+### Adding FastCanvas to Your Application
 
 ```
-	npm install -g plugman
+	cordova plugin add https://github.com/shakiba/phonegap-plugin-fast-canvas.git
 ```
 
-This is an alternate method, as used by the PhoneGap Build system.
-After creating your Cordova app with `create`, run the PlugMan script as follows to install the FastCanvas plugin:
-
-```
-	plugman install --platform android --project <android folder of your project> --plugin https://github.com/phonegap/phonegap-plugin-fast-canvas.git
-```
-
-#### If you have scale issues with your content ####
+#### If you have scale issues with your content
 Adding the following to your `index.html` will often help:
 
 ```
 	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 ```
 
-#### Changing the Java interface ####
-
-Additional prerequisites:
-* Android NDK - the [Android NDK](http://developer.android.com/tools/sdk/ndk/index.html) is a separate download.
-The native interface used by FastCanvas is defined in `FastCanvasJNI.java`. 
-If at any point in time you change `FastCanvasJNI.java`, you'll also need to regenerate 
-`FastCanvasJNI.h` and then recompile the native code.
-
-These instructions are for Windows. If working on a Mac, use / instead of \, mv instead of move, etc.
-
-1. Compile FastCanvasJNI.java:
-```
-	\FastCanvas\Android>javac -d . src\com\adobe\plugins\FastCanvasJNI.java src\com\adobe\plugins\FastCanvasTextureDimension.java
-```
-
-2. Create FastCanvasJNI.h
-```
-	\FastCanvas\Android>javah -jni com.adobe.plugins.FastCanvasJNI
-```
-	
-3. Move it to the correct location
-```
-	\FastCanvas\Android>move com_adobe_plugins_FastCanvasJNI.h jni\FastCanvasJNI.h
-```
-	
-4. Clean up
-```
-	\FastCanvas\Android>rmdir /s com
-```
-	
-5. Build the JNI library from the command line (Command Prompt or Terminal window): 
-```
-	\FastCanvas\Android>[path to NDK]\ndk-build
-```
-	
-	Should produce output similar to: 
-```
-		Compile++ thumb  : FastCanvasJNI <= FastCanvasJNI.cpp
-		Compile++ thumb  : FastCanvasJNI <= Canvas.cpp
-		StaticLibrary    : libstdc++.a
-		SharedLibrary    : libFastCanvasJNI.so
-		Install          : libFastCanvasJNI.so => libs/armeabi/libFastCanvasJNI.so
-```
-
-
-Using FastCanvas in Your Project
-================================
+### Using FastCanvas in Your Project
 
 FastCanvas was designed to mimic the standard HTML 2D Canvas to help make it easy to use 
 or implement in your existing canvas-based applications.  Like the HTML canvas, FastCanvas
@@ -131,7 +58,7 @@ exceptions:
 
 * Canvas objects are created with `FastCanvas.create()`
 * Image objects are created with `FastCanvas.createImage()`
-* At the end of each frame a call to `FastCanvas.render()` is required
+* At the end of each frame a call to `FastCanvas.render()` is required to flush buffered API calls
 
 These commands work with both FastCanvas and HTML canvas applications.  Once you have your 
 application working with FastCanvas, it will also work with an HTML canvas.
@@ -173,8 +100,7 @@ the following meta tag to be assured that window metrics are reported accurately
 
 
 
-Example Using FastCanvas
-========================
+## Example Using FastCanvas
 
 The game "Hungry Hero" has been re-implemented in JavaScript (from
 AS3). It is a simple touch based flying game based on the Starling API.
@@ -184,8 +110,7 @@ display list API - to wrap calls to the FastCanvas plugin to do rendering.
 https://github.com/phonegap/phonegap-fast-canvas-example
 
 
-FastCanvas API
-==============
+## FastCanvas API
 
 The bulk of the FastCanvas API consists a subset of the methods within the 
 standard HTML5 canvas implementation of 
@@ -222,16 +147,14 @@ Additionally, FastCanvas includes the following:
 | FastContext2D.capture(x,y,w,h,fileName, successCallback, errorCallback); | Saves the current state of the canvas as an image |
 
 
-Architecture
-============
+## Architecture
 
 FastCanvas runs a Canvas(-like) implementation. 
 
-### On A Top Surface
+### On A Bottom Surface
 
-FastCanvas output will cover any HTML output - so you should generally avoid 
-HTML rendering as it will only consume performance. The FastCanvas plugin 
-creates an OpenGL surface that sits on top of the browser.
+FastCanvas output will be covered by HTML output so your HTML must be transparent.
+The FastCanvas plugin creates an OpenGL surface that is covered by webview.
 
 ### OpenGL renderer in C++
 
@@ -248,8 +171,7 @@ the threads, separation of the game from the renderer, and (in the
 future) downclocking the render thread.
 
 
-Using FastCanvas Efficiently
-----------------------------
+### Using FastCanvas Efficiently
 
 For best performance, minimize the number of draw calls per fram in the GL layer.
 
@@ -258,4 +180,48 @@ What that means at the JavaScript level is:
 * Use as few textures as possible
 * Avoid swapping textures in and out, and preload if possible.
 * Try to batch drawImage calls that use the same texture. It is vastly more efficient to make ten drawImage calls in a row using one texture, and then make ten more using a second texture, than to switch back and forth twenty times.
+
+### Changing the Java interface
+
+Additional prerequisites:
+* Android NDK - the [Android NDK](http://developer.android.com/tools/sdk/ndk/index.html) is a separate download.
+The native interface used by FastCanvas is defined in `FastCanvasJNI.java`. 
+If at any point in time you change `FastCanvasJNI.java`, you'll also need to regenerate 
+`FastCanvasJNI.h` and then recompile the native code.
+
+These instructions are for Windows. If working on a Mac, use / instead of \, mv instead of move, etc.
+
+1. Compile FastCanvasJNI.java:
+```
+  \FastCanvas\Android>javac -d . src\com\adobe\plugins\FastCanvasJNI.java src\com\adobe\plugins\FastCanvasTextureDimension.java
+```
+
+2. Create FastCanvasJNI.h
+```
+  \FastCanvas\Android>javah -jni com.adobe.plugins.FastCanvasJNI
+```
+  
+3. Move it to the correct location
+```
+  \FastCanvas\Android>move com_adobe_plugins_FastCanvasJNI.h jni\FastCanvasJNI.h
+```
+  
+4. Clean up
+```
+  \FastCanvas\Android>rmdir /s com
+```
+  
+5. Build the JNI library from the command line (Command Prompt or Terminal window): 
+```
+  \FastCanvas\Android>[path to NDK]\ndk-build
+```
+  
+  Should produce output similar to: 
+```
+    Compile++ thumb  : FastCanvasJNI <= FastCanvasJNI.cpp
+    Compile++ thumb  : FastCanvasJNI <= Canvas.cpp
+    StaticLibrary    : libstdc++.a
+    SharedLibrary    : libFastCanvasJNI.so
+    Install          : libFastCanvasJNI.so => libs/armeabi/libFastCanvasJNI.so
+```
 
