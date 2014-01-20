@@ -968,10 +968,7 @@ FastCanvas.prototype.getContext = function(contextID){
 	return this._context;
 };
 
-
-if(!window.FastCanvas) {
-  window.FastCanvas = FastCanvas;
-}
+(window.plugins || window.plugins = {}).fastCanvas = window.FastCanvas = FastCanvas;
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FastCanvas;
