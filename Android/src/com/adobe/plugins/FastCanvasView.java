@@ -214,11 +214,6 @@ public class FastCanvasView extends GLSurfaceView {
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             Log.i(TAG, "onSurfaceCreated: " + gl + ", " + config);
 
-            TextureRequest m;
-            while ((m = loadQueue.poll()) != null) {
-                loadTexture(m.callbackContext, m.texture);
-            }
-
             IntBuffer ib = IntBuffer.allocate(100);
             ib.position(0);
             GLES10.glGetIntegerv(GLES10.GL_RED_BITS, ib);
@@ -243,8 +238,19 @@ public class FastCanvasView extends GLSurfaceView {
         }
 
         public void onDrawFrame(GL10 gl) {
-            FastCanvasJNI.render(renderCommand);
-            checkError();
+
+            if (!loadQueue.isEmpty()) {
+                // not before onSurfaceCreated
+                TextureRequest m;
+                while ((m = loadQueue.poll()) != null) {
+                    loadTexture(m.callbackContext, m.texture);
+                }
+            }
+
+            if (renderCommand != null) {
+                FastCanvasJNI.render(renderCommand);
+                checkError();
+            }
         }
 
         private static final String TAG = "FastCanvasRenderer";
