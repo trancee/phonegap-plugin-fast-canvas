@@ -46,7 +46,7 @@ Prerequisites:
 Adding the following to your `index.html` will often help:
 
 ```
-	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
 ```
 
 ### Using FastCanvas in Your Project
