@@ -615,8 +615,8 @@ FastCanvas._createFastCanvas = function(){
 	// we attempt to use window.inner* values but will fallback
 	// to using screen.avail* if inner values return 0. For 
 	// non-windowed mobile applications, these should be equivalent
-	fastCanvas._width = (window.innerWidth > 0) ? window.innerWidth : screen.availWidth;
-	fastCanvas._height = (window.innerHeight > 0) ? window.innerHeight : screen.availHeight;
+	fastCanvas._width = window.innerWidth;
+	fastCanvas._height = window.innerHeight;
 
 	/**
 	 * Defines the width of the FastCanvas. The actual width
@@ -681,8 +681,8 @@ FastCanvas._createHTMLCanvas = function(){
 	canvas.className = "fastCanvas"; // for styling (bgcolor)
 	
 	// canvas is full screen matching fast canvas 
-	canvas.width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-	canvas.height = (window.innerHeight > 0) ? window.innerHeight : screen.height;
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
 	
 	// try to keep out of any layout flow
 	canvas.style.position = "absolute";
@@ -968,7 +968,7 @@ FastCanvas.prototype.getContext = function(contextID){
 	return this._context;
 };
 
-(window.plugins || window.plugins = {}).fastCanvas = window.FastCanvas = FastCanvas;
+(window.plugins || (window.plugins = {})).fastCanvas = window.FastCanvas = FastCanvas;
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FastCanvas;
