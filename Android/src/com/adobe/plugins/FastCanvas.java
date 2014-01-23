@@ -70,14 +70,14 @@ public class FastCanvas extends CordovaPlugin {
     @Override
     public void onResume(boolean multitasking) {
         Log.i(TAG, "onResume");
-        fastView.onResume();
+        // fastView.onResume();
         super.onResume(multitasking);
     }
 
     @Override
     public void onPause(boolean multitasking) {
         Log.i(TAG, "onPause");
-        fastView.onPause();
+        // fastView.onPause();
         super.onPause(multitasking);
     }
 
