@@ -150,10 +150,10 @@ Additionally, FastCanvas includes the following:
 
 FastCanvas runs a Canvas(-like) implementation. 
 
-### On A Bottom Surface
+### On A Top Surface
 
-FastCanvas output will be covered by HTML output so your HTML must be transparent.
-The FastCanvas plugin creates an OpenGL surface that is covered by webview.
+FastCanvas output will cover any HTML output - so you should generally avoid HTML rendering as it will only consume performance.
+The FastCanvas plugin creates an OpenGL surface that sits on top of the browser.
 
 ### OpenGL renderer in C++
 

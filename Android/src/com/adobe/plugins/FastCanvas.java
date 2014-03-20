@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 public class FastCanvas extends CordovaPlugin {
@@ -47,22 +48,34 @@ public class FastCanvas extends CordovaPlugin {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                FrameLayout fastlayout = new FrameLayout(activity);
-                fastlayout.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout layout = new FrameLayout(activity);
+                layout.setLayoutParams(new FrameLayout.LayoutParams(
                         FrameLayout.LayoutParams.MATCH_PARENT,
                         FrameLayout.LayoutParams.MATCH_PARENT));
-                activity.setContentView(fastlayout);
+                activity.setContentView(layout);
 
-                fastlayout.addView(fastView);
+                layout.addView(fastView);
 
-                // webview over glsurface...
-                View cordova = (View) webView.getParent();
-                cordova.setBackgroundColor(0x00000000);
-                cordova.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
-                fastlayout.addView(cordova);
+                // webview over glsurface
+                // it doesn't work on some devices (4.0.3, etc)
+                if (Boolean.FALSE) {
+                    View cordova = (View) webView.getParent();
+                    cordova.setBackgroundColor(0x00000000);
+                    cordova.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+                    layout.addView(cordova);
 
-                webView.setBackgroundColor(0x00000000);
-                webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+                    webView.setBackgroundColor(0x00000000);
+                    webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+
+                    webView.setWebViewClient(new WebViewClient() {
+                        @Override
+                        public void onPageFinished(WebView view, String url) {
+                            webView.setBackgroundColor(0x00000000);
+                            webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE,
+                                    null);
+                        }
+                    });
+                }
             }
         });
     }

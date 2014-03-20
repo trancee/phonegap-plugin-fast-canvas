@@ -41,22 +41,41 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 public class FastCanvasView extends GLSurfaceView {
 
+    private FastCanvas plugin;
     private LinkedList<Command> queue = new LinkedList<Command>();
     private Map<Integer, Texture> textures = new HashMap<Integer, Texture>();
     private String renderCommand;
 
     public FastCanvasView(Context context, FastCanvas plugin) {
         super(context);
+        this.plugin = plugin;
         this.setEGLConfigChooser(false);// turn off the depth buffer
         this.setRenderer(new FastCanvasRenderer());
         this.setRenderMode(RENDERMODE_CONTINUOUSLY);
 
         this.setFocusableInTouchMode(true);
         this.requestFocus();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return plugin.webView.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        return plugin.webView.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return plugin.webView.dispatchTouchEvent(event);
     }
 
     @Override
