@@ -43,23 +43,27 @@ FastCanvasUtils._toNative = function(success, fail, service, action, args){
  * @private
  */
 FastCanvasUtils._defProp = function(obj, name, getter, setter){
-	// standard approach
-	if (typeof Object.defineProperty === "function"){
-		Object.defineProperty(obj, name, {get:getter, set:setter});
-		return;
-	}
-
-	// if standard not available, fallback to legacy
-	if (typeof obj.__defineGetter__ === "function" && typeof obj.__defineSetter__ === "function"){
-		obj.__defineGetter__(name, setter);
-		obj.__defineSetter__(name, setter);
-		return;
-	}
-
-	if (!FastCanvasUtils._defProp.warnedUnsupported){
-		console.log("Warning: Unable to define custom properties for FastCanvas; respective getter/setter methods will need to be used instead.");
-		FastCanvasUtils._defProp.warnedUnsupported = true;
-	}
+  try {
+    // standard approach
+    if (typeof Object.defineProperty === "function"){
+      Object.defineProperty(obj, name, {get:getter, set:setter});
+      return;
+    }
+  
+    // if standard not available, fallback to legacy
+    if (typeof obj.__defineGetter__ === "function" && typeof obj.__defineSetter__ === "function"){
+      obj.__defineGetter__(name, setter);
+      obj.__defineSetter__(name, setter);
+      return;
+    }
+  
+    if (!FastCanvasUtils._defProp.warnedUnsupported){
+      console.log("Warning: Unable to define custom properties for FastCanvas; respective getter/setter methods will need to be used instead: " + name);
+      FastCanvasUtils._defProp.warnedUnsupported = true;
+    }
+  } catch (e) {
+    console.log("Warning: Unable to define custom properties for FastCanvas; respective getter/setter methods will need to be used instead: " + name);
+  }
 };
 FastCanvasUtils._defProp.warnedUnsupported = false;
 
