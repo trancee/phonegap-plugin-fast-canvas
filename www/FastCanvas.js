@@ -560,6 +560,17 @@ FastCanvas._instance = null;
  */
 FastCanvas.isFast = false;
 
+if (typeof window.CustomEvent !== 'function') {
+    exports.CustomEvent = function(type, eventInitDict) {
+        var newEvent = document.createEvent('CustomEvent');
+        newEvent.initCustomEvent(type,
+                                 !!(eventInitDict && eventInitDict.bubbles),
+                                 !!(eventInitDict && eventInitDict.cancelable),
+                                 (eventInitDict ? eventInitDict.details : null));
+        return newEvent;
+    };
+}
+
 FastCanvas.readyEvent = new CustomEvent("FastCanvasReady");
 
 FastCanvas.available = null;
