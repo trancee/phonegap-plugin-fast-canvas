@@ -4,10 +4,9 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := FastCanvasJNI
 LOCAL_SRC_FILES := FastCanvasJNI.cpp \
-				   JNIHelper.cpp \
+                   JNIHelper.cpp \
                    Canvas.cpp \
-				   lodepng.c
-				   
+                   lodepng.c
 
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -landroid
 
