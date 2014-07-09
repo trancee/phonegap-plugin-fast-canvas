@@ -561,7 +561,7 @@ FastCanvas._instance = null;
 FastCanvas.isFast = false;
 
 if (typeof window.CustomEvent !== 'function') {
-    exports.CustomEvent = function(type, eventInitDict) {
+    window.CustomEvent = function(type, eventInitDict) {
         var newEvent = document.createEvent('CustomEvent');
         newEvent.initCustomEvent(type,
                                  !!(eventInitDict && eventInitDict.bubbles),
