@@ -296,7 +296,7 @@ public class FastCanvasView extends GLSurfaceView {
 
     public boolean execute(String action, JSONArray args,
             final CallbackContext callbackContext) throws JSONException {
-        // Log.i(TAG, "execute: " + action);
+        Log.i(TAG, "execute: " + action);
 
         try {
 
