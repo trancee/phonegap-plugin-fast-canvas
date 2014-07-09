@@ -58,7 +58,7 @@ public class FastCanvas extends CordovaPlugin {
 
                 // webview over glsurface
                 // it doesn't work on some devices (4.0.3, etc)
-                if (Boolean.FALSE) {
+                //if (Boolean.FALSE) {
                     View cordova = (View) webView.getParent();
                     cordova.setBackgroundColor(0x00000000);
                     cordova.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
@@ -75,7 +75,7 @@ public class FastCanvas extends CordovaPlugin {
                                     null);
                         }
                     });
-                }
+                //}
             }
         });
     }
