@@ -3,9 +3,9 @@
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
- 
+
  http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@
  * @private
  */
 FastCanvasUtils._toNative = function(success, fail, service, action, args){
-	// exec may not be defined outside of the 
+	// exec may not be defined outside of the
 	// context of a native cordova application
 	if (typeof cordova !== "undefined" && typeof cordova.exec === 'function'){
 		cordova.exec(success, fail, service, action, args || []);
@@ -49,14 +49,14 @@ FastCanvasUtils._defProp = function(obj, name, getter, setter){
       Object.defineProperty(obj, name, {get:getter, set:setter});
       return;
     }
-  
+
     // if standard not available, fallback to legacy
     if (typeof obj.__defineGetter__ === "function" && typeof obj.__defineSetter__ === "function"){
       obj.__defineGetter__(name, setter);
       obj.__defineSetter__(name, setter);
       return;
     }
-  
+
     if (!FastCanvasUtils._defProp.warnedUnsupported){
       console.log("Warning: Unable to define custom properties for FastCanvas; respective getter/setter methods will need to be used instead: " + name);
       FastCanvasUtils._defProp.warnedUnsupported = true;
@@ -69,7 +69,7 @@ FastCanvasUtils._defProp.warnedUnsupported = false;
 
 /**
  * Creates a new FastCanvasImage. For portability, its suggested you use
- * {@link FastCanvas.createImage} instead of ceating FastCanvasImages through 
+ * {@link FastCanvas.createImage} instead of ceating FastCanvasImages through
  * use of the <code>new</code> operator to help ensure you get the correct image
  * type for the context you're targeting.
  * @classdesc Image replacement for images used in FastCanvas. When drawing images
@@ -82,8 +82,8 @@ FastCanvasUtils._defProp.warnedUnsupported = false;
  * // type depending on what kind of context
  * // myContext is (HTML or FastCanvas)
  * var myImage = FastCanvas.createImage();
- * 
- * // Alternatively creating a new FastCanvasImage manually 
+ *
+ * // Alternatively creating a new FastCanvasImage manually
  * // using the class constructor function
  * var myFastImage = new FastCanvasImage();
  */
@@ -106,8 +106,8 @@ function FastCanvasImage(){
 	 * @type {number}
 	 */
 	this.id = (++FastCanvasImage.idCounter);
-	
-	this._id = this.id; // public facing "id" but _id used to internally track image 
+
+	this._id = this.id; // public facing "id" but _id used to internally track image
 	this._src = ""; // image source path
 	this._complete = true; // "is loading" identifier for complete property
 }
@@ -119,14 +119,14 @@ function FastCanvasImage(){
 FastCanvasImage.idCounter = 0;
 
 /**
- * Callback for when an image has successfully loaded a 
+ * Callback for when an image has successfully loaded a
  * file path assigned to {@link FastCanvasImage#src}.
  * @type {function}
  * @name FastCanvasImage#onload
  */
 
 /**
- * Callback for when an image has failed to load a 
+ * Callback for when an image has failed to load a
  * file path assigned to {@link FastCanvasImage#src}.
  * @type {function}
  * @name FastCanvasImage#onerror
@@ -198,7 +198,7 @@ FastCanvasUtils._defProp(FastCanvasImage.prototype, "src",
 
 
 /**
- * False when the image is in the process of loading an 
+ * False when the image is in the process of loading an
  * image after the src property has been set. True when
  * loading is complete or if src is never set. If an error
  * occurred when attempting to load the image, once the
@@ -221,7 +221,7 @@ FastCanvasUtils._defProp(FastCanvasImage.prototype, "complete",
 
 
 /**
- * <b>Invalid constructor</b>: Obtain a FastContext2D instance 
+ * <b>Invalid constructor</b>: Obtain a FastContext2D instance
  * through <code>FastCanvas.getContext("2d")</code>,
  * not through use of the <code>new</code> operator.
  * @classdesc Class used to define the context object used
@@ -273,7 +273,7 @@ FastCanvasUtils._defProp(FastContext2D.prototype, "globalAlpha",
  * @param {function} [errorCallback] A callback that is fired when
  * there was an error in loading the image.
  * @example
- * // create a new image and load 
+ * // create a new image and load
  * // it from a relative URL path
  * var myImage = FastCanvas.createImage();
  * myImage.src = "images/spritesheet.jpg"; // calls loadTexture for you
@@ -293,7 +293,7 @@ FastContext2D.prototype.loadTexture = function (image, successCallback, errorCal
 /**
  * Unloads an image from the FastCanvas plugin. Generally this method
  * is never called directly. Instead, it is called indirectly through
- * FastCanvasImage instances upon setting their 
+ * FastCanvasImage instances upon setting their
  * {@link FastCanvasImage#src|FastCanvasImage.src}
  * property to a false value such as <code>null</code> or an empty
  * string (<code>""</code>).
@@ -308,16 +308,16 @@ FastContext2D.prototype.unloadTexture = function (image) {
 	FastCanvasUtils._toNative(null, null, 'FastCanvas', 'unloadTexture', [image._id]);
 };
 
-/** 
+/**
  * Defines the 2D matrix transform applied to drawings within
  * the context.
- * @param {number} a The value that affects the positioning of pixels along the x 
+ * @param {number} a The value that affects the positioning of pixels along the x
  * axis when scaling or rotating the context.
- * @param {number} b The value that affects the positioning of pixels along the y 
+ * @param {number} b The value that affects the positioning of pixels along the y
  * axis when rotating or skewing the context.
- * @param {number} c The value that affects the positioning of pixels along the x 
+ * @param {number} c The value that affects the positioning of pixels along the x
  * axis when rotating or skewing the context.
- * @param {number} d The value that affects the positioning of pixels along the y 
+ * @param {number} d The value that affects the positioning of pixels along the y
  * axis when scaling or rotating the context.
  * @param {number} tx The distance by which to translate the context along the x axis.
  * @param {number} ty The distance by which to translate the context along the y axis.
@@ -326,27 +326,27 @@ FastContext2D.prototype.setTransform = function(a, b, c, d, tx, ty) {
 	this._drawCommands = this._drawCommands.concat("t" + (a===1 ? "1" : a.toFixed(6)) + "," + (b===0 ? "0" : b.toFixed(6)) + "," + (c===0 ? "0" : c.toFixed(6)) + "," + (d===1 ? "1" : d.toFixed(6)) + "," + tx + "," + ty + ";");
 };
 
-/** 
+/**
  * Defines an added 2D matrix transform applied to drawings within
  * the context.
- * @param {number} a The value added to the value that affects the positioning of 
+ * @param {number} a The value added to the value that affects the positioning of
  * pixels along the x axis when scaling or rotating the context.
- * @param {number} b The value added to the value that affects the positioning of 
+ * @param {number} b The value added to the value that affects the positioning of
  * pixels along the y axis when rotating or skewing the context.
- * @param {number} c The value added to the value that affects the positioning of 
+ * @param {number} c The value added to the value that affects the positioning of
  * pixels along the x axis when rotating or skewing the context.
- * @param {number} d The value added to the value that affects the positioning of 
+ * @param {number} d The value added to the value that affects the positioning of
  * pixels along the y axis when scaling or rotating the context.
- * @param {number} tx The value added to the distance by which to translate the 
+ * @param {number} tx The value added to the distance by which to translate the
  * context along the x axis.
- * @param {number} ty The value added to the distance by which to translate the 
+ * @param {number} ty The value added to the distance by which to translate the
  * context along the y axis.
  */
 FastContext2D.prototype.transform = function(a, b, c, d, tx, ty) {
 	this._drawCommands = this._drawCommands.concat("f" + (a===1 ? "1" : a.toFixed(6)) + "," + (b===0 ? "0" : b.toFixed(6)) + "," + (c===0 ? "0" : c.toFixed(6)) + "," + (d===1 ? "1" : d.toFixed(6)) + "," + tx + "," + ty + ";");
 };
 
-/** 
+/**
  * Restores the 2D matrix transform to the identity matrix. This is
  * equivalent to calling <code>context.setTransform(1,0,0,1,0,0)</code>.
  */
@@ -354,18 +354,18 @@ FastContext2D.prototype.resetTransform = function() {
 	this._drawCommands = this._drawCommands.concat("m;");
 };
 
-/** 
+/**
  * Scales the 2D matrix transform along the x and y axes.
- * @param {number} a The value added to the value that affects the positioning of 
+ * @param {number} a The value added to the value that affects the positioning of
  * pixels along the x axis when scaling or rotating the context.
- * @param {number} d The value added to the value that affects the positioning of 
+ * @param {number} d The value added to the value that affects the positioning of
  * pixels along the y axis when scaling or rotating the context.
  */
 FastContext2D.prototype.scale = function( a, d ) {
 	this._drawCommands = this._drawCommands.concat("k" + a.toFixed(6) + "," + d.toFixed(6) + ";");
 };
 
-/** 
+/**
  * Rotates the 2D matrix transform by a specified number of radians.
  * @param {number} angle The value in radians to rotate the context.
  */
@@ -373,20 +373,20 @@ FastContext2D.prototype.rotate = function( angle ) {
 	this._drawCommands = this._drawCommands.concat("r" + angle.toFixed(6) + ";");
 };
 
-/** 
+/**
  * Moves the 2D matrix transform along the x and y axes.
- * @param {number} tx The value added to the distance by which to translate the 
+ * @param {number} tx The value added to the distance by which to translate the
  * context along the x axis.
- * @param {number} ty The value added to the distance by which to translate the 
+ * @param {number} ty The value added to the distance by which to translate the
  * context along the y axis.
  */
 FastContext2D.prototype.translate = function( tx, ty ) {
 	this._drawCommands = this._drawCommands.concat("l" + tx + "," + ty + ";");
 };
 
-/** 
+/**
  * Sets a save point for the current context transform. This allows
- * you to arbitrarily modify the transform and restore it back to its 
+ * you to arbitrarily modify the transform and restore it back to its
  * to its original state at the time save() was called by using restore().
  * @see FastContext2D#restore
  */
@@ -394,7 +394,7 @@ FastContext2D.prototype.save = function() {
 	this._drawCommands = this._drawCommands.concat("v;");
 };
 
-/** 
+/**
  * Restores the state of the context transform to the state at
  * the point in time when save() was last called.
  * @see FastContext2D#save
@@ -403,7 +403,7 @@ FastContext2D.prototype.restore = function() {
 	this._drawCommands = this._drawCommands.concat("e;");
 };
 
-/** 
+/**
  * For FastContext2D, clearRect does nothing (no op) but is provided
  * as a convenience function to make working between FastCanvas
  * and an HTML canvas easier.  Regardless of which type of
@@ -414,11 +414,11 @@ FastContext2D.prototype.clearRect = function(x,y,width,height){
 	// noop
 };
 
-/** 
- * Draws a {@link FastCanvasImage} into the FastCanvas using the 
+/**
+ * Draws a {@link FastCanvasImage} into the FastCanvas using the
  * current 2D matrix transform.  This method has 3 different signatures:
- * <code>drawImage(image, dx, dy)</code>, 
- * <code>drawImage(image, dx, dy, dw, dh)</code> and 
+ * <code>drawImage(image, dx, dy)</code>,
+ * <code>drawImage(image, dx, dy, dw, dh)</code> and
  * <code>drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)</code>. The usage
  * is determined by the number of parameters passed.
  * @param {FastCanvasImage} image The source image to be used when drawing to the canvas.
@@ -443,12 +443,12 @@ FastContext2D.prototype.drawImage = function(
 	image,			// image
 	sx, sy, sw, sh,	// source (or destination if fewer args)
 	dx, dy, dw, dh) {	// destination
-	
+
 	var numArgs = arguments.length;
 	if (numArgs <= 3){
 		// drawImage(image, dx,dy); position only (s becomes d)
 		this._drawCommands = this._drawCommands.concat("d" + image._id + ",0,0," + image.width + "," + image.height + "," + sx + "," + sy + "," + image.width + "," + image.height + ";");
-			
+
 	}else if (numArgs <= 5){
 		// drawImage(image, dx,dy,dw,dh); position and size (s becomes d)
 		this._drawCommands = this._drawCommands.concat("d" + image._id + ",0,0," + image.width + "," + image.height + "," + sx + "," + sy + "," + sw + "," + sh + ";");
@@ -457,7 +457,7 @@ FastContext2D.prototype.drawImage = function(
 		this._drawCommands = this._drawCommands.concat("d" + image._id + "," + sx + "," + sy + "," + sw + "," + sh + "," + dx + "," + dy + "," + dw + "," + dh + ";");
 	}
 };
-	
+
 /**
  * Informs the drawing context that drawing commands have
  * completed for the current frame and the should be sent
@@ -472,12 +472,12 @@ FastContext2D.prototype.drawImage = function(
  * // if canvas being used is FastCanvas
  * var myCanvas = FastCanvas.create();
  * var myContext = myCanvas.getContext("2d");
- * 
+ *
  * // ...
  * myContext.translate(10,10);
  * myContext.rotate(Math.PI);
- * // ... 
- * 
+ * // ...
+ *
  * // after all context calls are complete
  * // for the current frame:
  * FastCanvas.render(); // calls FastContext2D.render()
@@ -499,7 +499,7 @@ FastContext2D.prototype.capture = function(x,y,w,h,fileName, successCallback, er
 	if (errorCallback && typeof errorCallback !== 'function') {
 		throw new Error('errorCallback parameter not a function');
 	}
-	
+
 	FastCanvasUtils._toNative(successCallback, errorCallback, 'FastCanvas', 'capture', [x,y,w,h,fileName]);
 };
 
@@ -518,7 +518,7 @@ FastContext2D.prototype.capture = function(x,y,w,h,fileName, successCallback, er
  * <p><b>Note:</b> Though there is a FastCanvas class available in code;
  * it is not used to construct the FastCanvas instance
  * as it is, iteself, a DIV element. This means operators like <code>instanceof</code>
- * will fail if tested against FastCanvas with an instance returned by 
+ * will fail if tested against FastCanvas with an instance returned by
  * {@link FastCanvas.create}.</p>
  * @class
  * @example
@@ -526,7 +526,7 @@ FastContext2D.prototype.capture = function(x,y,w,h,fileName, successCallback, er
  * // and FastContext2D for drawing
  * var myCanvas = FastCanvas.create();
  * var myContext = myCanvas.getContext("2d");
- * 
+ *
  * // load an image to draw on screen
  * var myImage = FastCanvas.createImage();
  * myImage.onload = function(){
@@ -535,7 +535,7 @@ FastContext2D.prototype.capture = function(x,y,w,h,fileName, successCallback, er
  *      FastCanvas.render();
  * }
  * myImage.src = "images/spritesheet.jpg";
- */ 
+ */
 function FastCanvas(){
 	// default constructor
 }
@@ -560,11 +560,14 @@ FastCanvas._instance = null;
  */
 FastCanvas.isFast = false;
 
+FastCanvas.readyEvent = new CustomEvent("FastCanvasReady");
+
+FastCanvas.available = null;
 /**
  * Creates and initializes the FastCanvas instance. There can be
  * only one FastCanvas instance; calling this method multiple times
  * will return the same instance.  Instances of FastCanvas are HTML
- * DIV elements.  If FastCanvas is not supported on the current 
+ * DIV elements.  If FastCanvas is not supported on the current
  * device, an on-list HTML Canvas will be returned.
  * @param {boolean} [forceFallback] If true, the return value will
  * always be an HTML canvas rather than a FastCanvas.
@@ -575,7 +578,7 @@ FastCanvas.isFast = false;
 FastCanvas.create = function(forceFallback){
 
 	if (FastCanvas._instance === null){
-	
+
 		if (!forceFallback && FastCanvas._isAvailable()){
 			FastCanvas._instance = FastCanvas._createFastCanvas();
 			FastCanvas.isFast = true;
@@ -584,7 +587,7 @@ FastCanvas.create = function(forceFallback){
 			FastCanvas.isFast = false;
 		}
 	}
-	
+
 	return FastCanvas._instance;
 }
 
@@ -601,7 +604,7 @@ FastCanvas._createFastCanvas = function(){
 	var fastCanvas = document.createElement("div");
 	fastCanvas.id = "fastCanvas"; // to help identify in DOM
 	fastCanvas.className = "fastCanvas"; // for styling (bgcolor)
-	
+
     // adding FastCanvas element to display list, not to
 	// be seen, but so styles can be picked up and
 	// inherited from the DOM to help with assigning
@@ -617,7 +620,7 @@ FastCanvas._createFastCanvas = function(){
 
     // get the FastCanvas size from the available window dimenions
 	// we attempt to use window.inner* values but will fallback
-	// to using screen.avail* if inner values return 0. For 
+	// to using screen.avail* if inner values return 0. For
 	// non-windowed mobile applications, these should be equivalent
 	fastCanvas._width = window.innerWidth;
 	fastCanvas._height = window.innerHeight;
@@ -671,30 +674,30 @@ FastCanvas._createFastCanvas = function(){
 
 	return fastCanvas;
 };
- 
+
 /**
  * Creates and returns an HTML Canvas element that has
  * been placed on the display list within the body element.
  * @private
  */
 FastCanvas._createHTMLCanvas = function(){
-	
-	// HTML canvas fallback for fast canvas 
+
+	// HTML canvas fallback for fast canvas
 	var canvas = document.createElement("canvas");
 	canvas.id = "fastCanvas"; // to help identify in DOM
 	canvas.className = "fastCanvas"; // for styling (bgcolor)
-	
-	// canvas is full screen matching fast canvas 
+
+	// canvas is full screen matching fast canvas
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
-	
+
 	// try to keep out of any layout flow
 	canvas.style.position = "absolute";
-	
+
 	// add to display list
 	var body = document.body;
 	body.insertBefore(canvas, body.firstChild);
-	
+
 	return canvas;
 }
 
@@ -711,7 +714,7 @@ FastCanvas._createHTMLCanvas = function(){
  * // create a new image for the canvas
  * var myImage = FastCanvas.createImage();
  * // ...
- * myContext.drawImage(myImage, ...); 
+ * myContext.drawImage(myImage, ...);
  */
 FastCanvas.createImage = function(){
 	if (FastCanvas._instance === null){
@@ -726,7 +729,7 @@ FastCanvas.createImage = function(){
 };
 
 /**
- * Executes the native render method only if the active context 
+ * Executes the native render method only if the active context
  * is of the type FastContext2D.
  * HTML 2D contexts do not require the render call so passing
  * @example
@@ -744,48 +747,61 @@ FastCanvas.render = function(){
 };
 
 /**
- * Identifies whether or not the FastCanvas plugin is 
+ * Identifies whether or not the FastCanvas plugin is
  * installed and available for use in this application.
  * @return {boolean} True if FastCanvas is available,
  * false if not.  If false, be prepared to
- * use an HTML canvas in place of FastCanvas. 
+ * use an HTML canvas in place of FastCanvas.
  * @private
  */
 FastCanvas._isAvailable = function(){
+	if (FastCanvas.available != null){
+		return FastCanvas.available;
+	}
+
 	var isAvailable = false;
-	
+
 	function successCallback(availability){
 		isAvailable = availability;
 	}
 	function errorCallback(){
 		isAvailable = false;
 	}
-	// synchronous unless native code can't callback into 
+	// synchronous unless native code can't callback into
 	// JS at which point we assume the default unavailable
 	FastCanvasUtils._toNative( successCallback, errorCallback, 'FastCanvas', 'isAvailable');
 	return isAvailable;
 };
 
+FastCanvas.initialize = function(){
+	FastCanvasUtils._toNative(function(availability){
+		FastCanvas.available = availability;
+		document.dispatchEvent(FastCanvas.readyEvent);
+	} , function(){
+		FastCanvas.available = false;
+		document.dispatchEvent(FastCanvas.readyEvent);
+	} , 'FastCanvas' , 'isAvailable');
+};
 /**
- * Sets the backgound color of the FastCanvas to the color 
+ * Sets the backgound color of the FastCanvas to the color
  * specified. This is not needed if the canvas element is
  * styled to have a certain background color by the time
  * <code>getContext()</code> is called as it will be set
- * to that color automatically at that time. 
+ * to that color automatically at that time.
  * @param {number|string} [color] Color to be used for the background
- * of the FastCanvas.  This can be a numeric value or a 3 or 
- * 6-character hexadecimal string (not counting a preceeding, 
+ * of the FastCanvas.  This can be a numeric value or a 3 or
+ * 6-character hexadecimal string (not counting a preceeding,
  * optional hash ("#")).  For example, red can be expressed as
  * 0xFF0000, "#FF0000", "FF0000", "#F00", or "F00". If no value
  * or a false value (undefined, null or empty string) is passed,
- * an attempt is made to automatically determine the color from 
+ * an attempt is made to automatically determine the color from
  * the style of the fastCanvas element or the document.
  * @example
  * // avoid use of setBackgroundColor through css styling
  * var myCanvas = FastCanvas.create();
  * myCanvas.style.backgroundColor = "#F0F";
  * var myContext = myCanvas.getContext("2d"); // bg color auto-set
- * 
+ *
  * // ... change bg color later ...
  * FastCanvas.setBackgroundColor("#000");
  */
@@ -795,7 +811,7 @@ FastCanvas.setBackgroundColor = function (color) {
 	if (FastCanvas._instance === null){
 		throw new Error("A canvas must be created with FastCanvas.create() before a background color can be set");
 	}
-	
+
 	if (!color){
 		// no color so find automatically
 		colorStr = FastCanvas._getBackgroundColor();
@@ -804,20 +820,20 @@ FastCanvas.setBackgroundColor = function (color) {
 			return;
 		}
 	}else{
-	
+
 		var colorType = typeof(color);
-		
+
 		if (colorType === "number"){
 			colorStr = color.toString(16);
-			
+
 			// pad small numbers with preceeding 0's
 			while (colorStr.length < 6){
 				colorStr = "0" + colorStr;
 			}
-			
+
 		}else if (colorType === "string"){
 			colorStr = color;
-			
+
 			// strip preceeding hash (#)
 			if (colorStr.charAt(0) === "#"){
 				colorStr = colorStr.substring(1);
@@ -828,7 +844,7 @@ FastCanvas.setBackgroundColor = function (color) {
 				colorStr = colorStr.charAt(0) + colorStr.charAt(0)
 					 + colorStr.charAt(1) + colorStr.charAt(1)
 					 + colorStr.charAt(2) + colorStr.charAt(2);
-					 
+
 			}else if (numChars !== 6){
 				throw new TypeError("Hexadecimal color values must be exactly 3 or 6 characters long");
 			}
@@ -836,7 +852,7 @@ FastCanvas.setBackgroundColor = function (color) {
 			throw new TypeError("Value color must be numeric or hexadecimal string");
 		}
 	}
-	
+
 	if (FastCanvas.isFast){
 		FastCanvasUtils._toNative(null, null, 'FastCanvas', 'setBackgroundColor', [color]);
 	}else{
@@ -859,7 +875,7 @@ FastCanvas._getBackgroundColor = function(){
 	// walk up parent tree finding background color
 	// ideally it should be placed on the fastCanvas
 	// element itself so it will be found in the
-	// first iteration of the loop 
+	// first iteration of the loop
 	while(node && node !== document){
 		style = window.getComputedStyle(node);
 		if (style && style.backgroundColor && style.backgroundColor !== "rgba(0, 0, 0, 0)"){
@@ -881,11 +897,11 @@ FastCanvas._getBackgroundColor = function(){
 	}
 
 	// if still color not found, return its
-	// default, undefined/empty value 
+	// default, undefined/empty value
 	if (!col){
 		return col;
 	}
-	
+
 	try {
 		// convert rgb(a) into tighter hex[6] format;
 		// assumes col is always going to be reported in rgb format
@@ -902,7 +918,7 @@ FastCanvas._getBackgroundColor = function(){
 		if (b.length < 2){
 			b = "0" + b;
 		}
-		
+
 		// does not precede with "#"
 		return r + g + b;
 	}catch(err){
@@ -916,14 +932,14 @@ FastCanvas._getBackgroundColor = function(){
 
 
 /**
- * Writes the current pixels from the FastCanvas into a file specified by fileName. 
- * x,y,width,height specify a rectangle of the canvas from which to read the pixels. 
- * If width or height equal -1 then the entire canvas is captured. On Android the 
- * root directory is /mnt/sdcard/. Any sub folders can be supplied in the fileName 
+ * Writes the current pixels from the FastCanvas into a file specified by fileName.
+ * x,y,width,height specify a rectangle of the canvas from which to read the pixels.
+ * If width or height equal -1 then the entire canvas is captured. On Android the
+ * root directory is /mnt/sdcard/. Any sub folders can be supplied in the fileName
  * parameter like so: '/MyFolder/testScreenshot.png'.
- * Calls to capture() must be made prior to a render call, otherwise the behavior is 
- * undefined. The successCallback is executed when the file is saved, and provides 
- * the location as the callback parameter, otherwise errorCallback is executed with 
+ * Calls to capture() must be made prior to a render call, otherwise the behavior is
+ * undefined. The successCallback is executed when the file is saved, and provides
+ * the location as the callback parameter, otherwise errorCallback is executed with
  * an error message.
  * @param {number} x The x location of the capture rectangle.
  * @param {number} y The y location of the capture rectangle.
@@ -941,15 +957,15 @@ FastCanvas.capture = function(x,y,w,h,fileName, successCallback, errorCallback) 
 }
 
 /**
- * Returns a FastContext2D instance mimicing the context 
+ * Returns a FastContext2D instance mimicing the context
  * (CanvasRenderingContext2D) returned from an HTML canvas.
  * The first time this method is called, FastCanvas will also
  * implicitly call {@link FastCanvas.setBackgroundColor} to
  * update the background color of the canvas context based on
  * the current style of the FastCanvas object.
- * @param {string} contextID The type of context returned, 
+ * @param {string} contextID The type of context returned,
  * typically "2d", though this value is ignored and always
- * presumed to be "2d" for FastCanvas. For compatibility 
+ * presumed to be "2d" for FastCanvas. For compatibility
  * between an HTML canvas and FastCanvas, you should always
  * use "2d" for this value.
  * @return {FastContext2D} The FastCanvas context used to
