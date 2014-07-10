@@ -379,6 +379,7 @@ private:
         TRANSLATE,          // tr
         NUM_PARSE_MODES
     };
+    const unsigned char* CaptureGLLayerDirect();
 
     const char* ParseSetTransform( const char *renderCommands,
                                    int parseMode,               // what to read: IDENTITY, FULL_XFORM, etc.

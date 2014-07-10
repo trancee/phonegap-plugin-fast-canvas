@@ -934,6 +934,33 @@ bool Canvas::CaptureGLLayer(CaptureParams * params)
     }
 }
 
+const unsigned char* Canvas::CaptureGLLayerDirect()
+{
+    //get the dimensions of the current viewport
+    int results[4];
+    glGetIntegerv(GL_VIEWPORT, results);
+
+    int x = results[0];
+    int y = results[1];
+    int width = results[2];
+    int height = results[3];
+
+    //flip y axis to be in openGL lower left origin
+    y = results[3] - y - height;
+
+    //use glGetPixels to get the bits from the current frame buffer
+    // Make the BYTE array, factor of 4 because it's RGBA.
+    GLubyte *pixels = new GLubyte [4 * width * height];
+    if (!pixels) {
+        DLog( "Canvas::CaptureGLLayer Unable to allocate buffer");
+        return NULL;
+    }
+    glFinish();
+    glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    return pixels;
+}
+
 //Get the front of the callback queue
 Callback * Canvas::GetNextCallback()
 {

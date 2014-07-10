@@ -73,6 +73,14 @@ JNIEXPORT void JNICALL Java_com_adobe_plugins_FastCanvasJNI_captureGLLayer
 
 /*
  * Class:     com_adobe_plugins_FastCanvasJNI
+ * Method:    captureGLLayerDirect
+ * Signature: ()[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_com_adobe_plugins_FastCanvasJNI_captureGLLayerDirect
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_adobe_plugins_FastCanvasJNI
  * Method:    contextLost
  * Signature: ()V
  */
