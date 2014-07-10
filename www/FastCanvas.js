@@ -503,6 +503,23 @@ FastContext2D.prototype.capture = function(x,y,w,h,fileName, successCallback, er
 	FastCanvasUtils._toNative(successCallback, errorCallback, 'FastCanvas', 'capture', [x,y,w,h,fileName]);
 };
 
+FastContext2D.prototype.toDataURL = function(mimeType, quality, successCallback, errorCallback) {
+	if (successCallback && typeof successCallback !== 'function') {
+		throw new Error('successCallback parameter not a function');
+	}
+	if (errorCallback && typeof errorCallback !== 'function') {
+		throw new Error('errorCallback parameter not a function');
+	}
+
+	if (typeof (quality) === 'string' || typeof (quality) === 'number') {
+		quality = Number (quality) * 100;
+	} else {
+		quality = 100;
+	}
+
+	FastCanvasUtils._toNative(successCallback, errorCallback, 'FastCanvas', 'toDataURL', [mimeType, quality]);
+};
+
 /**
  * <b>Invalid constructor</b>: Obtain the FastCanvas instance through {@link FastCanvas.create},
  * not through use of the <code>new</code> operator.
@@ -600,7 +617,7 @@ FastCanvas.create = function(forceFallback){
 	}
 
 	return FastCanvas._instance;
-}
+};
 
 /**
  * Creates and returns a FastCanvas DIV element
@@ -710,7 +727,7 @@ FastCanvas._createHTMLCanvas = function(){
 	body.insertBefore(canvas, body.firstChild);
 
 	return canvas;
-}
+};
 
 
 /**
@@ -965,7 +982,13 @@ FastCanvas.capture = function(x,y,w,h,fileName, successCallback, errorCallback) 
 	if (FastCanvas.isFast){
 		FastCanvas._instance.getContext().capture(x,y,w,h,fileName, successCallback, errorCallback);
 	}
-}
+};
+
+FastCanvas.toDataURL = function(mimeType, quality){
+	if (FastCanvas.isFast){
+		FastCanvas._instance.getContext().toDataURL(mimeType, quality);
+	}
+};
 
 /**
  * Returns a FastContext2D instance mimicing the context

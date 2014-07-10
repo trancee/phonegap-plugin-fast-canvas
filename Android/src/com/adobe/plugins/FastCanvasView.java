@@ -40,6 +40,7 @@ import android.opengl.GLES10;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -221,7 +222,7 @@ public class FastCanvasView extends GLSurfaceView {
 
         @Override
         public String toString() {
-            return url + "#" + id + "@" + hashCode();
+            return url.substring(0,30) + "#" + id + "@" + hashCode();
         }
 
         private void unload() {
@@ -233,23 +234,36 @@ public class FastCanvasView extends GLSurfaceView {
         private FastCanvasTextureDimension load() throws IOException {
 
             FastCanvasTextureDimension dim = new FastCanvasTextureDimension();
+            Bitmap bmp;
 
-            String path = "www/" + this.url;
+            if (this.url.startsWith ("data:")) {
+                Log.i(TAG, "DataURL[" + this.url.length () + "] = " + this.url);
+                String encodedData = this.url.replaceFirst ("^data:image/(png|jpg|jpeg);base64,", "");
+                Log.i(TAG, "EncodedData[" + encodedData.length () + "] = " + encodedData);
 
-            AssetManager assets = getContext().getAssets();
+                byte [] decodedData = Base64.decode (encodedData, Base64.DEFAULT);
+                Log.i(TAG, "DecodedData[" + decodedData.length + "] = " + decodedData);
 
-            // PNG files with premultiplied
-            // alpha and GLUtils don't get along
-            // http://stackoverflow.com/questions/3921685
-            if (path.toLowerCase(Locale.US).endsWith(".png")) {
-                if (FastCanvasJNI.addPngTexture(assets, path, this.id, dim)) {
-                    this.loaded = true;
-                    return dim;
+                bmp = BitmapFactory.decodeByteArray (decodedData, 0, decodedData.length);
+                Log.i(TAG, "bmp = " + bmp);
+            } else {
+                String path = "www/" + this.url;
+
+                AssetManager assets = getContext().getAssets();
+
+                // PNG files with premultiplied
+                // alpha and GLUtils don't get along
+                // http://stackoverflow.com/questions/3921685
+                if (path.toLowerCase(Locale.US).endsWith(".png")) {
+                    if (FastCanvasJNI.addPngTexture(assets, path, this.id, dim)) {
+                        this.loaded = true;
+                        return dim;
+                    }
+                    Log.i(TAG, "native PNG load filaed, falling back to GLUtils");
                 }
-                Log.i(TAG, "native PNG load filaed, falling back to GLUtils");
-            }
 
-            Bitmap bmp = BitmapFactory.decodeStream(assets.open(path));
+                bmp = BitmapFactory.decodeStream(assets.open(path));
+            }
 
             int[] glID = new int[1];
             GLES10.glGenTextures(1, glID, 0);
@@ -286,6 +300,7 @@ public class FastCanvasView extends GLSurfaceView {
 
             dim.width = bmp.getWidth();
             dim.height = bmp.getHeight();
+            Log.i(TAG, "bitmap = " + bmp.getWidth () + "x" + bmp.getHeight ());
 
             this.loaded = true;
             return dim;
@@ -367,6 +382,20 @@ public class FastCanvasView extends GLSurfaceView {
 
                 FastCanvasJNI.captureGLLayer(callbackContext.getCallbackId(),
                         x, y, width, height, file);
+
+                return true;
+
+            } else if (action.equals("toDataURL")) {
+                Log.i(TAG, "toDataURL");
+
+                byte[] pixels = FastCanvasJNI.captureGLLayerDirect(/*callbackContext.getCallbackId()*/);
+                Log.i(TAG, "toDataURL::pixels = " + pixels);
+
+                Log.i(TAG, "convert to data URL");
+                String mimeType = args.getString(0);
+                int quality = args.getInt(1);
+                Log.i(TAG, "toDataURL[" + mimeType + "][" + quality + "]");
+                // toDataURL(mimeType, quality);
 
                 return true;
 
