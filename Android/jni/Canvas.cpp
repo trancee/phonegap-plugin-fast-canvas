@@ -936,6 +936,7 @@ bool Canvas::CaptureGLLayer(CaptureParams * params)
 
 const unsigned char* Canvas::CaptureGLLayerDirect()
 {
+    DLog( "Canvas::CaptureGLLayerDirect");
     //get the dimensions of the current viewport
     int results[4];
     glGetIntegerv(GL_VIEWPORT, results);
@@ -952,12 +953,13 @@ const unsigned char* Canvas::CaptureGLLayerDirect()
     // Make the BYTE array, factor of 4 because it's RGBA.
     GLubyte *pixels = new GLubyte [4 * width * height];
     if (!pixels) {
-        DLog( "Canvas::CaptureGLLayer Unable to allocate buffer");
+        DLog( "Canvas::CaptureGLLayerDirect Unable to allocate buffer");
         return NULL;
     }
     glFinish();
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
+    DLog( "Canvas::CaptureGLLayerDirect got pixels");
     return pixels;
 }
 
