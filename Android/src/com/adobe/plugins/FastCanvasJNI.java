@@ -40,7 +40,7 @@ public class FastCanvasJNI {
     // file
     public static native void captureGLLayer(String callbackID, int x, int y,
             int width, int height, String fileName);
-    public static native byte[] captureGLLayerDirect(/*String callbackID*/);
+    public static native byte[] captureGLLayerDirect(int width, int height);
 
     // Deletes native memory associated with lost GL context
     public static native void contextLost();

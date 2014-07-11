@@ -134,6 +134,30 @@ JNIEXPORT void JNICALL Java_com_adobe_plugins_FastCanvasJNI_captureGLLayer
     }
 }
 
+JNIEXPORT jbyteArray JNICALL Java_com_adobe_plugins_FastCanvasJNI_captureGLLayerDirect
+  (JNIEnv *env, jclass, jint width, jint height)
+{
+	Canvas *theCanvas = Canvas::GetCanvas();
+    if (theCanvas) {
+		// const unsigned char* buf = theCanvas->CaptureGLLayerDirect();
+		jbyte *buf = (jbyte *)theCanvas->CaptureGLLayerDirect();
+		jsize size = (4 * width * height);
+		jbyteArray ret = env->NewByteArray(size);
+		env->SetByteArrayRegion (ret, 0, size, buf);
+		delete[] buf;
+		return ret;
+    }
+
+    /*
+	jbyte* buf = new jbyte[1024];
+	memset (buf, 0x00, 1024);
+	jbyteArray ret = env->NewByteArray(1024);
+	env->SetByteArrayRegion (ret, 0, 1024, buf);
+	delete[] buf;
+	return ret;
+	*/
+}
+
 JNIEXPORT void JNICALL Java_com_adobe_plugins_FastCanvasJNI_contextLost
     (JNIEnv *je, jclass jc) {
     Canvas::ContextLost();

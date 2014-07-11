@@ -517,7 +517,7 @@ FastContext2D.prototype.toDataURL = function(mimeType, quality, successCallback,
 		quality = 100;
 	}
 
-	FastCanvasUtils._toNative(successCallback, errorCallback, 'FastCanvas', 'toDataURL', [mimeType, quality]);
+	FastCanvasUtils._toNative(successCallback, errorCallback, 'FastCanvas', 'toDataURL', [mimeType, quality, FastCanvas._instance._width, FastCanvas._instance._height]);
 };
 
 /**

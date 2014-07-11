@@ -16,6 +16,7 @@
  */
 package com.adobe.plugins;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.IntBuffer;
@@ -388,15 +389,24 @@ public class FastCanvasView extends GLSurfaceView {
             } else if (action.equals("toDataURL")) {
                 Log.i(TAG, "toDataURL");
 
-                byte[] pixels = FastCanvasJNI.captureGLLayerDirect(/*callbackContext.getCallbackId()*/);
-                Log.i(TAG, "toDataURL::pixels = " + pixels);
-
-                Log.i(TAG, "convert to data URL");
                 String mimeType = args.getString(0);
                 int quality = args.getInt(1);
-                Log.i(TAG, "toDataURL[" + mimeType + "][" + quality + "]");
+                int width = args.getInt(2);
+                int height = args.getInt(3);
+                Log.i(TAG, "toDataURL[" + mimeType + "][" + quality + "] = " + width + "x" + height);
                 // toDataURL(mimeType, quality);
 
+                byte[] pixels = FastCanvasJNI.captureGLLayerDirect(width, height);
+                Log.i(TAG, "toDataURL::pixels = " + pixels + " = " + pixels.length);
+
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                Bitmap bmp = BitmapFactory.decodeByteArray(pixels, 0, pixels.length);
+                bmp.compress(Bitmap.CompressFormat.JPEG, quality, out);
+
+                String dataURL = "data:" + mimeType + ";base64," + Base64.encodeToString(out.toByteArray(), 0);
+
+                callbackContext.sendPluginResult(new PluginResult(
+                        PluginResult.Status.OK, dataURL));
                 return true;
 
             } else if (action.equals("isAvailable")) {
