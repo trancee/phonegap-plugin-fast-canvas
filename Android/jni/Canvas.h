@@ -344,6 +344,7 @@ public:
     void RemoveTexture(int id);
     void Render(const char *renderCommands, int length);
     void QueueCaptureGLLayer(int x, int y, int w, int h, const char * callbackID, const char * fn);
+    const unsigned char* CaptureGLLayerDirect();
 
     //callback helper functions
     Callback * GetNextCallback(); //return front of callback queue
@@ -379,7 +380,6 @@ private:
         TRANSLATE,          // tr
         NUM_PARSE_MODES
     };
-    const unsigned char* CaptureGLLayerDirect();
 
     const char* ParseSetTransform( const char *renderCommands,
                                    int parseMode,               // what to read: IDENTITY, FULL_XFORM, etc.
